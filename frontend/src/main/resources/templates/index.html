@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MetaMapa - Landing</title>
+  <link rel="icon" type="image/png" th:href="@{/images/metamapa-icon.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+<!-- Barra de Navegacion -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<!-- BANNER -->
+<div class="hero">
+  <img th:src="@{/images/mapa.jpg}" alt="Mapa Banner">
+  <div class="hero-text">
+    <h1>MetaMapa</h1>
+    <h2>Sistema de Gestión de Mapeos</h2>
+  </div>
+</div>
+
+<div class="intro-section">
+  <p class="intro-paragraph">
+    <span class="highlight">MetaMapa</span> es un sistema de gestión de mapeos colaborativos de código abierto,
+    desarrollado junto a la Universidad Tecnológica Nacional, que permite recopilar y visibilizar información de
+    manera descentralizada.
+  </p>
+  <p class="intro-paragraph">
+    Cada hecho registrado - ya sea un incendio, una inundación, un foco de contaminación o un evento social -
+    organizada en <span class="highlight">colecciones</span> y se ubica en tiempo y espacio, aportando valor a la
+    comunidad.
+  </p>
+  <p class="intro-paragraph">
+    Cualquier persona puede contribuir de forma anónima o registrada, cargando información en texto, imágenes, audios
+    o videos. Además, MetaMapa integra datos de otras ONG y fuentes oficiales, generando una visión más completa
+    gracias a su servicio de agregación.
+  </p>
+  <p class="intro-paragraph">
+    El sistema está pensado para ser implementado por distintas instituciones que deseen brindar a sus comunidades una
+    herramienta confiable, segura y accesible, con la misión de <span class="highlight">transformar datos dispersos en
+        conocimiento útil</span> para la acción colectiva.
+  </p>
+</div>
+
+<!-- Proposito, Objetivos y Ejemplos -->
+<main>
+  <!-- Proposito -->
+  <div class="card">
+    <h2>Propósito</h2>
+    <p>MetaMapa nace para transformar la inteligencia colectiva en acción. Su propósito es recopilar, organizar y
+      visibilizar información colaborativa en tiempo y espacio, para que comunidades, ONG, universidades y organismos
+      públicos puedan prevenir riesgos, resolver problemáticas sociales y ambientales, y construir conocimiento
+      confiable de manera abierta y descentralizada.</p>
+  </div>
+
+  <!-- Objetivos -->
+  <div class="card">
+    <h2>Objetivos</h2>
+    <ul>
+      <li>Reunir información confiable a través de la colaboración de personas, datasets y organizaciones.</li>
+      <li>Organizar los datos en mapas y colecciones que permitan identificar patrones, causas y consecuencias de los
+        hechos.</li>
+      <li>Garantizar transparencia y accesibilidad, sin recolectar información personal de quienes consultan.
+      </li>
+      <li>Ofrecer un sistema descentralizado, resistente a fallas y ataques, que proteja la disponibilidad de los
+        datos.</li>
+      <li>Favorecer la acción comunitaria, poniendo a disposición herramientas abiertas para el análisis y la toma de
+        decisiones.</li>
+    </ul>
+  </div>
+
+  <!-- Ejemplos -->
+  <div class="card">
+    <h2>Revisá las últimas noticias!</h2>
+    <p>Colecciones y hechos destacados en la última semana:</p>
+
+    <!-- Ejemplo de Colección -->
+    <div class="card-collection" th:if="${coleccionEjemplo != null}">
+      <h3 th:text="${coleccionEjemplo.titulo ?: 'Nombre de la colección'}"></h3>
+      <p th:text="${coleccionEjemplo.descripcion ?: ''}"></p>
+      <div class="meta" th:if="${coleccionEjemplo.algoritmoConsenso != null}">
+        Algoritmo: <span th:text="${coleccionEjemplo.algoritmoConsenso}"></span>
+      </div>
+      <button th:onclick="|location.href='/colecciones/' + ${coleccionEjemplo.id}|">
+        Ver colección
+      </button>
+    </div>
+
+    <!-- Ejemplo de Hecho -->
+    <div class="card-hecho" th:if="${hechoEjemplo != null}">
+      <h3 th:text="${hechoEjemplo.titulo ?: 'Título del hecho'}"></h3>
+      <p class="descripcion" th:text="${hechoEjemplo.descripcion ?: ''}"></p>
+
+      <p><strong>Categoría:</strong>
+        <span th:text="${hechoEjemplo.categoria ?: 'Sin categoría'}"></span>
+      </p>
+      <p><strong>Fecha del acontecimiento:</strong>
+        <span th:text="${hechoEjemplo.fechaAcontecimiento != null ? hechoEjemplo.fechaAcontecimiento : ''}"></span>
+      </p>
+      <p><strong>Fecha de carga:</strong>
+        <span th:text="${hechoEjemplo.fechaCarga != null ? hechoEjemplo.fechaCarga : ''}"></span>
+      </p>
+
+      <div class="meta">
+        Estado:
+        <span th:text="${hechoEjemplo.activo != null && hechoEjemplo.activo ? 'Activo' : 'Inactivo'}"
+              th:classappend="${hechoEjemplo.activo != null && hechoEjemplo.activo ? 'activo' : 'inactivo'}"></span>
+      </div>
+    </div>
+
+    <!-- Botón para ver más -->
+    <button th:onclick="|location.href='@{/colecciones}'|" class="btn-collection">
+      Visualizar más Colecciones
+    </button>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Modal de Login -->
+<div th:replace="fragments/login-modal :: login-modal"></div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

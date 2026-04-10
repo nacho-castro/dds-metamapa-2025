@@ -1,0 +1,221 @@
+/* === GENERAL === */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background:
+        radial-gradient(1200px 700px at -10% 70%, rgba(233, 205, 196, .28), transparent 60%),
+        radial-gradient(900px 600px at 35% -10%, rgba(197, 226, 232, .30), transparent 55%),
+        radial-gradient(700px 500px at 60% 40%, rgba(220, 232, 238, .45), transparent 60%),
+        radial-gradient(1200px 900px at 90% 10%, rgba(255, 255, 255, .85), rgba(255, 255, 255, .95) 50%, rgba(255, 255, 255, 1) 60%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* === LOGO === */
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 3.5rem;
+    font-weight: 700;
+     color: #0b1116;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.logo-subtitle {
+    color: #606770;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* === FORMULARIO === */
+.signup-container {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1c1e21;
+    margin: 0 0 8px;
+}
+
+.form-subtitle {
+    color: #606770;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* === CAMPOS === */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: #f5f6f7;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #1877f2;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+
+.form-input::placeholder {
+    color: #8a8d91;
+}
+
+/* === FECHA DE NACIMIENTO === */
+.birthday-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #606770;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.birthday-selects {
+    display: flex;
+    gap: 12px;
+}
+
+.birthday-select {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background: #f5f6f7;
+    color: #1c1e21;
+}
+
+.birthday-select:focus {
+    outline: none;
+    border-color: #1877f2;
+    background: #fff;
+}
+
+/* === TÉRMINOS === */
+.terms-text {
+    font-size: 0.8rem;
+    color: #777;
+    line-height: 1.4;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.terms-link {
+    color: #1877f2;
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* === BOTÓN DE REGISTRO === */
+.signup-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #7a42c2, #a271e0);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.signup-btn:hover {
+    background: linear-gradient(135deg, #6433a8, #8d5ad6);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(53, 2, 60, 0.4);
+}
+
+.signup-btn:active {
+    transform: translateY(0);
+}
+
+/* === ENLACE DE LOGIN === */
+.login-link-container {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #dadde1;
+}
+
+.login-link {
+    color: #1877f2;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 480px) {
+    .signup-container {
+        padding: 30px 24px;
+    }
+
+    .logo {
+        font-size: 2.8rem;
+    }
+
+    .form-title {
+        font-size: 1.6rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .birthday-selects {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

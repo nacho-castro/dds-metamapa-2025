@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+</head>
+<body>
+<div id="hechoModal" class="modal" th:fragment="cargar-hecho-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h2>Cargar Hecho</h2>
+        </div>
+        <form id="hechoForm" th:action="@{/hechos}" th:object="${hecho}" method="post">
+            <!-- Título -->
+            <div class="field-group">
+                <label>Título</label>
+                <input type="text" th:field="*{titulo}" placeholder="Ingrese título" required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="field-group">
+                <label>Descripción</label>
+                <textarea th:field="*{descripcion}" placeholder="Ingrese descripción" required></textarea>
+            </div>
+
+            <!-- Categoría -->
+            <div class="field-group">
+                <label>Categoría</label>
+                <input type="text" th:field="*{categoria}" placeholder="Ingrese categoría" required>
+            </div>
+
+            <!-- Lugar (Objeto LugarDTO) -->
+            <div class="field-group">
+                <div style="display: flex; width: 100%;">
+                    <div style="flex: 1; margin-right: 20px;">
+                        <label style="display: block; margin-bottom: 5px;">Latitud</label>
+                        <input type="number" step="any" th:field="*{lugarAcontecimiento.latitud}"
+                               required style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 5px;">Longitud</label>
+                        <input type="number" step="any" th:field="*{lugarAcontecimiento.longitud}"
+                               required style="width: 100%; box-sizing: border-box;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fecha del acontecimiento -->
+            <div class="field-group">
+                <label>Fecha y hora del Acontecimiento</label>
+                <input type="datetime-local" th:field="*{fechaAcontecimiento}" required>
+            </div>
+
+            <!-- Multimedia -->
+            <div class="field-group">
+                <label>Multimedia</label>
+
+                <div id="lista-multimedia">
+                    <div class="input-row" style="margin-bottom: 5px;">
+                        <input type="text" th:field="*{multimediaUrls}" placeholder="https://ingrese-una-url.com" required>
+                    </div>
+                </div>
+                <button type="button" onclick="agregarCampoUrl()" style="margin-top: 5px; cursor: pointer;">
+                    + Agregar otro link
+                </button>
+            </div>
+
+            <!-- Etiquetas -->
+            <div class="field-group">
+                <label>Etiquetas</label>
+                <div id="etiquetasContainer">
+                    <input type="text" name="etiquetas" placeholder="Ej: tormenta, granizo, invierno">
+                </div>
+                <small>Separar por coma (`,`) si son múltiples</small>
+            </div>
+
+
+            <!-- BOTÓN GUARDAR -->
+            <div class="field-group">
+                <button type="submit" class="next-btn">Guardar Hecho</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/js/colecciones.js}"></script>
+</body>
+</html>

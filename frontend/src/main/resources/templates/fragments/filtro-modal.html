@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="filtro-modal" id="filtroModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header-custom">
+            <h3>Filtrar Hechos</h3>
+            <span class="close-btn" id="closeFiltroModal">&times;</span>
+        </div>
+
+        <form th:action="@{'/colecciones/' + ${coleccionId}}" method="get" class="modal-body-custom">
+
+            <input type="hidden" name="limit" th:value="${limit}" />
+            <input type="hidden" name="curada" th:value="${curada}" />
+
+            <div class="input-group-custom">
+                <label for="keyword">Palabra clave</label>
+                <input type="text" id="keyword" name="keyword"
+                       th:value="${keyword}"
+                       placeholder="Ej: Incendio, Sequía..."
+                       class="input-custom">
+            </div>
+
+            <div class="input-group-custom">
+                <label for="categoria">Categoría</label>
+                <input type="text" id="categoria" name="categoria"
+                       th:value="${categoriaSeleccionada}"
+                       placeholder="Escribe la categoría exacta..."
+                       class="input-custom">
+            </div>
+
+            <div class="input-group-custom">
+                <label>Rango de fechas</label>
+                <div class="date-row">
+                    <div class="date-field">
+                        <small>Desde</small>
+                        <input type="date" name="fechaInicio" th:value="${fechaInicio}" class="input-custom">
+                    </div>
+                    <div class="date-field">
+                        <small>Hasta</small>
+                        <input type="date" name="fechaFin" th:value="${fechaFin}" class="input-custom">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer-custom">
+                <a th:href="@{'/colecciones/' + ${coleccionId}(curada=${curada})}" class="btn-secondary-custom">Limpiar</a>
+                <button type="submit" class="btn-primary-custom">Aplicar Filtros</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

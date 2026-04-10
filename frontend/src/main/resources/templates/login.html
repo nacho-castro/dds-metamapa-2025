@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MetaMapa - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/registro.css}">
+    <link rel="icon" type="image/png" th:href="@{/images/metamapa-icon.png}">
+</head>
+
+<body>
+<div class="signup-container">
+    <!-- Header -->
+    <div class="logo-container">
+        <div class="logo">MetaMapa</div>
+        <p class="logo-subtitle">Sistema de Gestión de Mapeos</p>
+    </div>
+
+    <div class="form-header">
+        <h1 class="form-title">Iniciar Sesión</h1>
+    </div>
+
+    <!-- Formulario -->
+    <form id="signupForm" th:action="@{/login}" th:object="${usuario}" method="post">
+        <!-- Email -->
+        <div class="form-group">
+            <input type="email" class="form-input" th:field="*{username}" placeholder="Correo electrónico" required>
+            <span class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+            <input type="password" class="form-input" th:field="*{password}" placeholder="Contraseña" required>
+            <span class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <!-- Botón -->
+        <button type="submit" class="signup-btn">Iniciar Sesión</button>
+    </form>
+
+    <!-- Enlace para iniciar sesión -->
+    <div class="login-link-container">
+        <a th:href="@{/registro}" class="login-link">¿No tienes una cuenta?</a>
+    </div>
+</div>
+
+<script th:src="@{/js/registro.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+@startuml
+
+class Coleccion{
+  - Long id;
+  - String titulo;
+  - String descripcion;
+  - List<Criterio> criterios; //filtra los hechos de la fuente
+  - List<Fuente> fuentes; //recorro la lista y traigo hechos de c/u
+  - List<Hechos> fuentes; //se agrega?
+  //una coleccion se persiste con sus hechos o solo los llama de las fuentes?
+}
+
+class Hecho {
+  - Long id;
+  - String titulo;
+  - String descripcion;
+  - String categoria;
+  - Lugar lugarAcontecimiento;
+  - LocalDate fechaAcontecimiento;
+  - LocalDate fechaCarga;
+
+  - Boolean activo;
+  - Usuario creador; //puede ser null si fue anónimo
+  - List<Etiqueta> etiquetas;
+  - Contenido contenido;
+  - boolean editable;
+  - List<Fuente> fuenteDeOrigen;
+}
+
+interface Fuente{
+ obtenerHechos(): List<Hecho>
+ //DUDA una entidad puede llamar a las APIS de fuentes?
+ //(Existen servicios para eso)
+}
+
+class FuenteDinamica implements Fuente{
+    - String endpoint
+}
+
+class FuenteEstatica implements Fuente{
+    - String endpoint
+    - String dataset //ej. "desktop/archivos/file.csv"
+}
+
+class FuenteProxy implements Fuente{
+    - String endpoint
+    - String apiExterna //ej. "http/disilab.com/"
+}
+
+Hecho -->"*" Fuente
+Coleccion -->"*" Fuente
+
+@enduml

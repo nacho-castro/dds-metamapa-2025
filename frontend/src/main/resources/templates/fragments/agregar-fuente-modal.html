@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+</head>
+<body>
+
+<!-- Modal Agregar Fuente -->
+<div id="agregarFuenteModal" class="modal" th:fragment="agregar-fuente-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <div class="modal-header">
+            <h2>Agregar Fuente a la Colección</h2>
+        </div>
+
+        <form id="agregarFuenteForm" th:action="@{/colecciones/agregar-fuente}" method="post">
+            <!-- ID de la colección (oculto o seteado por JS) -->
+            <input type="hidden" name="idColeccion" th:value="${coleccion.id}" />
+
+            <label for="idFuente">Seleccione una fuente</label>
+            <select name="idFuente" id="idFuente" required>
+                <option value="">-- Seleccionar fuente --</option>
+                <!-- Thymeleaf: lista de fuentes disponibles -->
+                <option th:each="fuente : ${fuentesDisponibles}"
+                        th:value="${fuente.id}"
+                        th:text="${fuente.nombre}">Fuente</option>
+            </select>
+
+            <div class="modal-actions">
+                <button type="submit" class="next-btn">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/hechos.js}"></script>
+</body>
+</html>

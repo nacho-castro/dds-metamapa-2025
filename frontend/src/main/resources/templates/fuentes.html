@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>MetaMapa - Fuentes</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- MENSAJES -->
+<div th:if="${error}" class="alert alert-error">
+  <span th:text="${error}"></span>
+</div>
+
+<div th:if="${mensaje}" class="alert alert-success">
+  <span th:text="${mensaje}"></span>
+</div>
+
+<!-- GRID DE FUENTES -->
+<div class="grid" th:if="${fuentes != null and !fuentes.isEmpty()}">
+
+  <div th:each="f : ${fuentes}" class="card">
+    <h3 th:text="${f.nombre}">Nombre fuente</h3>
+
+    <div class="meta">
+      Tipo: <span th:text="${f.tipoFuente}"></span>
+    </div>
+
+    <div class="meta" th:if="${f.path != null}">
+      URL: <a th:href="${f.path}" target="_blank" th:text="${f.path}"></a>
+    </div>
+
+    <div class="meta" th:if="${f.pathInfo != null}">
+      Info:
+      <a th:href="${f.pathInfo}" target="_blank"
+         th:text="${f.pathInfo}">
+      </a>
+    </div>
+
+    <div class="actions">
+      <!-- Solo admin -->
+      <div class="admin-icons" th:if="${rol == 'ADMINISTRADOR'}">
+
+        <button class="edit-btn"
+                onclick="abrirModalEditarFuente(this)"
+                th:data-id="${f.id}"
+                th:data-nombre="${f.nombre}"
+                th:data-tipo="${f.tipoFuente}"
+                th:data-path="${f.path}"
+                th:data-pathinfo="${f.pathInfo}">
+          ✏️
+        </button>
+
+
+        <form th:action="@{/fuentes/{id}/eliminar(id=${f.id})}"
+              method="post"
+              onsubmit="return confirm('¿Eliminar fuente?');">
+          <button type="submit">🗑️</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:if="${fuentes == null or fuentes.isEmpty()}" class="empty-state">
+  <p>No hay fuentes cargadas.</p>
+</div>
+
+
+<!-- Modal de Fuente -->
+<div th:replace="~{fragments/cargar-fuente-modal :: cargar-fuente-modal}"></div>
+
+<div th:replace="~{fragments/editar-fuente-modal :: editar-fuente-modal}"></div>
+
+<!-- FOOTER -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<div th:replace="~{fragments/login-modal :: login-modal}"></div>
+
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/colecciones.js}"></script>
+
+</body>
+</html>

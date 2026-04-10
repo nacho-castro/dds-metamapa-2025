@@ -1,0 +1,240 @@
+@startuml
+
+
+class Globals {
+  - edadMinimaParaPublicar: Integer
+  - diasParaEdicion: Integer
+  + verificadorEdad(Integer edad): Boolean
+  + getDiasParaEdicion(): Integer
+
+}
+
+' Controller
+
+class FuenteDinamicaController {
+  - fuenteDinamicaService: IFuenteDinamicaService
+  + crearHechoSinUsuario(HechoDTOInput hechoNuevo): HechoDTOOutput
+  + crearHechoConUsuario(HechoDTOInput hechoNuevo, Long idUsuario): HechoDTOOutput
+  + buscarTodos(): List<HechoDTOOutput>
+  + buscarHechoPorId(Long id): HechoDTOOutput
+  + editarHecho(HechoDTOInput hechoNuevo,Long idHecho): HechoDTOOutput
+  + eliminarHecho(Long id): HechoDTOOutput
+}
+
+class UsuarioController {
+  -  usuarioService: IUsuarioService
+  + crearUsuario(UsuarioDTOInput input): UsuarioDTOOutput
+  + buscarTodos(): List<UsuarioDTOOutput>
+  + buscarUsuarioPorId(Long id): UsuarioDTOOutput
+  + editarUsuario(UsuarioDTOInput input,Long idUsuario): UsuarioDTOOutput
+  + eliminarUsuario(@PathVariable("id") Long id): UsuarioDTOOutput
+}
+
+
+' MODELS
+
+' DTOS
+
+class HechoDTOInput {
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - fechaAcontecimiento: LocalDate
+  - lugarAcontecimiento: LugarDTOOutput
+  - etiquetas: List<EtiquetaDTOOutput
+}
+
+class UsuarioDTOInput {
+  - nombre:
+  - password: String
+  - edad: Integer
+  - rol: Rol
+}
+
+class EtiquetaDTOOutput {
+  - nombre: String
+}
+
+class HechoDTOOutput {
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - fechaAcontecimiento: LocalDate
+  - lugarAcontecimiento: LugarDTOOutput
+  - etiquetas: List<EtiquetaDTOOutput>
+}
+
+class LugarDTOOutput {
+  - latitud: Double
+  - longitud: Double
+}
+class UsuarioDTOOutput {
+  - id: Long
+  - String nombre: String
+}
+
+
+
+' ENTITIES
+
+
+
+' USUARIOS
+
+class Rol {
+  - nombreRol: TipoRoles
+  - permisos: List<Permiso>
+  + tienePermiso(Permiso permiso): Boolean
+}
+
+enum TipoRoles {
+    Visualizador
+    Usuario
+    Administrador
+    Contribuyente
+}
+
+class Permiso {
+  - descripcion: String
+}
+
+class Usuario {
+  - id: Long
+  - nombre: String
+  - password: String
+  - edad:  Integer
+  - rol: Rol
+  + estaRegistrado(): Boolean
+  + esAdministrador(): Boolean
+  + updateUsuario(Usuario nuevo): void
+}
+
+class UsuarioMapper {
+  +usuarioToDTO(Usuario usuario): UsuarioDTOOutput
+  + usuarioToDTO(List<Usuario> usuarios): List<UsuarioDTOOutput>
+}
+
+' REPOSITORIES
+
+interface HechoIDao {
+  +findAll(): List<Hecho>
+  + save(Hecho hecho): void
+  + findById(Long id): Hecho
+  + findByTitulo(String titulo): Hecho
+  + delete (Hecho hecho): void
+}
+
+interface UsuarioIDao {
+  + save(Usuario usuario): void
+  + saveAll(List<Usuario> hechos): void
+  + findAll(): List<Usuario>
+  + findById(Long id): Usuario
+  + delete(Usuario usuario): void
+}
+
+class HechoDaoMemory {
+  + findAll(): List<Hecho>
+  + save(Hecho hecho): void
+  + findById(Long id): Hecho
+  + findByTitulo(String titulo): Hecho
+  + delete (Hecho hecho): void
+}
+
+class UsuarioDaoMemory {
+  + save(Usuario usuario): void
+  + saveAll(List<Usuario> hechos): void
+  + findAll(): List<Usuario>
+  + findById(Long id): Usuario
+  + delete(Usuario usuario): void
+}
+
+
+
+interface IHechoRepository {
+   + save(Hecho hecho): void
+   + saveAll(List<Hecho> hechos): void
+   + findAll(): List<Hecho>
+   + findById(Long id): Hecho
+   + findByTitulo(String titulo): Hecho
+   + delete(Hecho hecho): void
+}
+
+interface IUsuarioRepository {
+   + save(Usuario usuario): void
+   + saveAll(List<Usuario> hechos): void
+   + findAll(): List<Usuario>
+   + findById(Long id): Usuario
+   + delete(Usuario usuario): void
+}
+
+class HechoRepository {
+   + save(Hecho hecho): void
+   + saveAll(List<Hecho> hechos): void
+   + findAll(): List<Hecho>
+   + findById(Long id): Hecho
+   + findByTitulo(String titulo): Hecho
+   + delete(Hecho hecho): void
+}
+
+class UsuarioRepository {
+   + save(Usuario usuario): void
+   + saveAll(List<Usuario> hechos): void
+   + findAll(): List<Usuario>
+   + findById(Long id): Usuario
+   + delete(Usuario usuario): void
+}
+
+
+' SERVICES
+
+class FuenteDinamicaService {
+   + subirHecho(HechoDTOInput hecho, Long idUsuario): HechoDTOOutput
+   + obtenerHechos(): List<HechoDTOOutput>
+   + buscarHechoPorId(Long id): HechoDTOOutput
+   + editarHecho(Long id, HechoDTOInput hechoNuevo): HechoDTOOutput
+   + eliminarHecho(Long id): HechoDTOOutput
+}
+
+class HechoService {
+   + crearHecho(Hecho hecho): Hecho
+   + obtenerHechos(): List<Hecho>
+   + obtenerHechoPorId(Long id): Hecho
+   + editarHecho(Long id, Hecho hechoNuevo): Hecho
+   + borrarHecho(Long id): Hecho
+}
+
+class UsuarioService {
+  + registrarUsuario(Usuario usuario): Usuario
+  + obtenerUsuarios(): List<Usuario>
+  + obtenerUsuarioPorId(Long id): Usuario
+  + editarUsuario(Long id, Usuario nuevo): Usuario
+  + boolean estaRegistrado(Long id): Boolean
+  + Usuario borrarUsuario(Long id);
+}
+
+interface IFuenteDinamicaService {
+   + subirHecho(HechoDTOInput hecho, Long idUsuario): HechoDTOOutput
+   + obtenerHechos(): List<HechoDTOOutput>
+   + buscarHechoPorId(Long id): HechoDTOOutput
+   + editarHecho(Long id, HechoDTOInput hechoNuevo): HechoDTOOutput
+   + eliminarHecho(Long id): HechoDTOOutput
+}
+
+interface IHechoService {
+   + crearHecho(Hecho hecho): Hecho
+   + obtenerHechos(): List<Hecho>
+   + obtenerHechoPorId(Long id): Hecho
+   + editarHecho(Long id, Hecho hechoNuevo): Hecho
+   + borrarHecho(Long id): Hecho
+}
+
+interface IUsuarioService {
+  + registrarUsuario(Usuario usuario): Usuario
+  + obtenerUsuarios(): List<Usuario>
+  + obtenerUsuarioPorId(Long id): Usuario
+  + editarUsuario(Long id, Usuario nuevo): Usuario
+  + boolean estaRegistrado(Long id): Boolean
+  + Usuario borrarUsuario(Long id);
+}
+
+@enduml

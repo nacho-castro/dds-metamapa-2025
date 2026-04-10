@@ -1,0 +1,20 @@
+enum TipoFuente {
+    DINAMICA
+    ESTATICA
+    PROXY
+}
+
+type FuenteAlt {
+    id: ID!
+    tipo: TipoFuente
+    path: String
+    pathInfo: String
+}
+
+type Query {
+    # Devuelve una única fuente por ID
+    fuente(id: ID!): FuenteAlt
+
+    # Devuelve una lista (según tu DataFetcher)
+    allFuentes(id: ID!): [FuenteAlt]
+}

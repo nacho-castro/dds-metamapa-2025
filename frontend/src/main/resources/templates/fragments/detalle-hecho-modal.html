@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/hechos.css}">
+</head>
+<body>
+<div id="detalleHechoModal" class="modal detalle-hecho" style="display:none;" th:fragment="detalle-hecho-modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h2 id="detalleHechoTitulo"></h2>
+        <p id="detalleHechoDescripcion"></p>
+        <p><strong>Categoría:</strong> <span id="detalleHechoCategoria"></span></p>
+        <p><strong>Lugar:</strong> <span id="detalleHechoLugar"></span></p>
+        <p><strong>Fecha del acontecimiento:</strong> <span id="detalleHechoFechaAcontecimiento"></span></p>
+        <p><strong>Fuente:</strong> <a id="detalleHechoFuentePath" href="#" target="_blank"></a></p>
+        <div id="detalleHechoMultimedia"></div>
+    </div>
+</div>
+<script th:src="@{/js/hechos.js}"></script>
+</body>
+</html>

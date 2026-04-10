@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Editar Hecho - MetaMapa</title>
+    <link rel="icon" type="image/png" th:href="@{/images/metamapa-icon.png}">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/hechos.css}">
+
+    <style>
+        /* Fondo suave */
+        body {
+            background-color: #f0f2f5;
+        }
+
+        /* Contenedor principal centrado */
+        .edit-page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 140px);
+            padding: 40px 20px;
+        }
+
+        /* Tarjeta del formulario */
+        .edit-card {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        /* --- CAMBIO: Encabezado Violeta (Marca) --- */
+        .edit-card-header {
+            background: linear-gradient(135deg, #7a42c2 0%, #5b2d99 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .edit-card-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .edit-card-header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Cuerpo del formulario */
+        .edit-card-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        /* Inputs estilizados */
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+        }
+
+        /* --- CAMBIO: Color de foco violeta --- */
+        .form-control:focus {
+            outline: none;
+            border-color: #7a42c2;
+            box-shadow: 0 0 0 3px rgba(122, 66, 194, 0.15);
+        }
+
+        /* Botones */
+        .edit-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-cancel {
+            background-color: #e0e0e0;
+            color: #555;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-cancel:hover {
+            background-color: #d0d0d0;
+            color: #333;
+        }
+
+        /* --- CAMBIO: Botón Guardar Violeta --- */
+        .btn-save {
+            background-color: #7a42c2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-save:hover {
+            background-color: #5b2d99;
+            transform: translateY(-2px);
+        }
+
+        .edit-card-header h2 {
+            color: #ffffff;
+        }
+
+        .edit-card-header p {
+            color: #ffffff;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="edit-page-container">
+    <div class="edit-card">
+
+        <div class="edit-card-header">
+            <h2>Editar Hecho</h2>
+            <p>Modificando: <strong th:text="${hecho.titulo}">Título del Hecho</strong></p>
+        </div>
+
+        <div class="edit-card-body">
+            <form th:action="@{'/hechos/' + ${hecho.id} + '/editar'}" th:object="${hecho}" method="post">
+
+                <input type="hidden" name="idColeccion" th:value="${idColeccion}">
+
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" id="titulo" th:field="*{titulo}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" th:field="*{descripcion}" rows="5" class="form-control" style="resize: vertical;" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <input type="text" id="categoria" th:field="*{categoria}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha">Fecha del Acontecimiento</label>
+                    <input type="datetime-local"
+                           id="fecha"
+                           name="fechaAcontecimiento"
+                           th:value="${#temporals.format(hecho.fechaAcontecimiento, 'yyyy-MM-dd''T''HH:mm')}"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="edit-card-actions">
+                    <a th:href="@{'/colecciones/' + ${idColeccion != null ? idColeccion : ''}}" class="btn-cancel">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn-save">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

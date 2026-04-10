@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+</head>
+<body>
+<div id="criterioModal" class="modal" th:fragment="cargar-criterio-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h2>Cargar Criterio</h2>
+        </div>
+        <form id="criterioForm" th:action="@{/criterios}" method="post">
+            <!-- Tipo -->
+            <div class="field-group">
+                <label>Tipo</label>
+                <input type="text" name="tipo" id="tipo" placeholder="Ingrese el tipo" required>
+            </div>
+
+            <!-- Valor 1 -->
+            <div class="field-group">
+                <label>Valor1</label>
+                <input type="text" name="valor1" id="valor1" placeholder="Ingrese el valor 1" required>
+            </div>
+
+            <!-- Valor 2 -->
+            <div class="field-group">
+                <label>Valor2</label>
+                <input type="text" name="valor2" id="valor2" placeholder="Ingrese el valor 2">
+            </div>
+
+            <!-- BOTÓN GUARDAR -->
+            <div class="field-group">
+                <button type="submit" class="next-btn">Guardar Criterio</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/js/colecciones.js}"></script>
+</body>
+</html>

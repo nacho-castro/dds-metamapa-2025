@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<nav th:fragment="navbar">
+    <div class="header-left">
+        <a th:href="@{/}" class="logo">MetaMapa</a>
+        <div class="buttons">
+            <button class="btn" th:if="${page != 'colecciones' and page != 'fuentes'}" th:onclick="|location.href='@{/colecciones}'|">🗺️ Colecciones</button>
+            <button class="btn" th:if="${page != 'colecciones' and page != 'fuentes'}" th:onclick="|location.href='@{/fuentes}'|">🗂️ Fuentes</button>
+            <button id="openFiltroModal" class="btn" th:if="${page == 'hechos'}">☰ Filtrar</button>
+            <form th:action="@{/colecciones}" method="get" class="search-form" th:if="${page == 'colecciones'}">
+                <div class="search-container">
+                    <input type="text" name="titulo" placeholder="Buscar colecciones..." th:value="${titulo}" />
+                    <a th:href="@{/colecciones}" class="btn reset-btn" th:if="${titulo != null and titulo != ''}">Mostrar todas</a>
+                </div>
+            </form>
+            <button id="openColeccionModal" th:if="${page == 'colecciones'}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn">📋 Cargar Coleccion</button>
+            <button id="openHechoModal" th:if="${page == 'colecciones'}" class="btn">📋 Cargar Hecho</button>
+            <button id="openCriterioModal" th:if="${page == 'colecciones'}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn">📋 Cargar Criterio</button>
+            <button id="openFuenteModal" th:if="${page == 'fuentes'}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn">📋 Cargar Fuente</button>
+
+        </div>
+    </div>
+    <div class="buttons">
+        <!-- TEXTO MODO DE NAVEGACIÓN -->
+        <span id="modoTexto" style="margin-left:10px; font-size:16px; color:black; font-weight:bold;" th:if="${page == 'hechos'}">Modo de navegación: Curada</span>
+        <!-- SWITCH MODO NAVEGACIÓN -->
+        <div class="custom-control custom-switch" th:if="${page == 'hechos'}">
+            <input type="checkbox" class="custom-control-input" id="editingswitch"
+                   th:checked="${curada}"
+                   onchange="window.location.href='?curada=' + this.checked">
+            <label class="custom-control-label" for="editingswitch">&nbsp;</label>
+        </div>
+
+        <button id="panelBtn" th:if="${page != 'admin'}" sec:authorize="hasRole('ADMINISTRADOR')" th:onclick="|location.href='@{/admin}'|" class="btn">Dashboard</button>
+        <button id="openLoginModal" sec:authorize="isAnonymous()" class="btn">Iniciar Sesión</button>
+        <button id="logoutBtn" class="btn" sec:authorize="isAuthenticated()" style="display:none;background-color:#C30913;color:white">Cerrar Sesión</button>
+    </div>
+</nav>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Error 429</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" th:href="@{/images/metamapa-icon.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+
+<body class="error">
+<!-- BARRA DE NAVEGACION -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<!-- CONTENIDO ERROR 429 -->
+<div class="error-container">
+    <h1 class="error-code">429</h1>
+    <h2 class="error-title">Too many requests...</h2>
+    <p class="error-message">
+        Demasiadas requests al servidor...
+    </p>
+
+    <img class="error-image" th:src="@{/images/429.jpg}" alt="Error 429">
+
+    <a th:href="@{/}" href="/" class="btn-home">Volver al inicio</a>
+</div>
+
+<!-- FOOTER -->
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

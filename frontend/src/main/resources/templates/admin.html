@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MetaMapa - Panel Administrador</title>
+    <link rel="icon" type="image/png" href="images/metamapa-icon.png">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<section class="admin-actions">
+    <header>
+        <h1>Dashboard Administrativo</h1>
+        <button class="btn-estadisticas"
+                th:onclick="|location.href='@{/admin/estadisticas}'|">
+            Ver Métricas
+        </button>
+    </header>
+</section>
+
+<section style="max-width: 1000px; margin: 2rem auto;">
+
+    <div th:if="${mensaje}"
+         style="padding: 15px; margin-bottom: 20px; border-radius: 8px; color: white; text-align: center; font-weight: bold;"
+         th:styleappend="${tipoMensaje == 'success' ? 'background-color: #28a745;' : 'background-color: #dc3545;'}">
+        <span th:text="${mensaje}"></span>
+    </div>
+
+    <h2>Solicitudes de Eliminación</h2>
+
+    <div th:each="s : ${solicitudes}" class="solicitud-card">
+
+        <div class="solicitud-header">
+            <span class="solicitud-info">
+                Solicitud #<span th:text="${s.id}"></span> · Hecho ID: <span th:text="${s.idHecho}"></span>
+            </span>
+
+            <span class="solicitud-fecha"
+                  th:text="${#temporals.format(s.fecha, 'dd/MM/yyyy HH:mm')}">
+                25/11/2025
+            </span>
+        </div>
+
+        <div class="solicitud-estado"
+             th:classappend="' estado-' + ${s.estado}">
+            <span th:text="${s.estado}">PENDIENTE</span>
+        </div>
+
+        <p class="solicitud-motivo">
+            <strong>Motivo:</strong> <span th:text="${s.motivoBorrado}">Motivo</span>
+        </p>
+
+        <div th:switch="${s.estado}">
+            <div th:case="'PENDIENTE'" class="solicitud-acciones">
+
+                <form th:action="@{'/admin/solicitudes/' + ${s.id} + '/aprobar'}"
+                      method="post"
+                      onsubmit="return confirm('ATENCIÓN: Al aprobar, el HECHO se eliminará permanentemente de la base de datos. ¿Continuar?');">
+                    <button type="submit" class="btn-aceptar">✓ Aceptar</button>
+                </form>
+
+                <form th:action="@{'/admin/solicitudes/' + ${s.id} + '/denegar'}"
+                      method="post"
+                      onsubmit="return confirm('¿Desea rechazar esta solicitud? El hecho permanecerá visible.');">
+                    <button type="submit" class="btn-rechazar">✗ Rechazar</button>
+                </form>
+
+            </div>
+
+            <div th:case="*"></div>
+        </div>
+    </div>
+
+    <div class="pagination-container" th:if="${totalPagesEliminacion > 0}">
+        <span class="pagination-info">
+        Página <span th:text="${pageEliminacion + 1}"></span> de <span th:text="${totalPagesEliminacion}"></span>
+        </span>
+
+        <div class="pagination-controls">
+            <a th:if="${pageEliminacion > 0}"
+               th:href="@{/admin(pageEliminacion=${pageEliminacion - 1}, pageEdicion=${pageEdicion}, estado=${estado})}"
+               class="btn-paginacion">
+                &laquo; Anterior
+            </a>
+
+            <a th:if="${pageEliminacion < totalPagesEliminacion - 1}"
+               th:href="@{/admin(pageEliminacion=${pageEliminacion + 1}, pageEdicion=${pageEdicion}, estado=${estado})}"
+               class="btn-paginacion">
+                Siguiente &raquo;
+            </a>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 50px;">Solicitudes de Edición</h2>
+
+    <div th:each="s : ${solicitudesEdicion}" class="solicitud-card">
+        <div class="solicitud-header">
+        <span class="solicitud-info">
+            Edición #<span th:text="${s.id}"></span> · Hecho Original: <span th:text="${s.tituloHechoOriginal}"></span>
+        </span>
+            <span class="solicitud-fecha" th:text="${#temporals.format(s.fecha, 'dd/MM/yyyy')}"></span>
+        </div>
+
+        <div class="solicitud-estado" th:classappend="' estado-' + ${s.estado}">
+            <span th:text="${s.estado}">PENDIENTE</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+            <div style="background: #f9f9f9; padding: 10px; border-radius: 5px;">
+                <strong>Propuesta:</strong><br>
+                <em th:text="${s.tituloPropuesto}"></em><br>
+                <small th:text="${s.descripcionPropuesta}"></small>
+            </div>
+            <div style="padding: 10px;">
+                <strong>Motivo:</strong> <span th:text="${s.motivo}"></span>
+            </div>
+        </div>
+
+        <div th:if="${s.estado == 'PENDIENTE'}" style="display: flex; gap: 10px;">
+            <form th:action="@{'/admin/solicitudes/edicion/' + ${s.id} + '/aprobar'}" method="post"
+                  onsubmit="return confirm('¿Aplicar estos cambios al hecho original?');">
+                <button type="submit" class="btn-aceptar">✅ Aplicar</button>
+            </form>
+
+            <form th:action="@{'/admin/solicitudes/edicion/' + ${s.id} + '/denegar'}" method="post"
+                  onsubmit="return confirm('¿Rechazar edición?');">
+                <button type="submit" class="btn-rechazar">❌ Descartar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="pagination-container" th:if="${totalPagesEdicion > 0}">
+        <span class="pagination-info">
+        Página <span th:text="${pageEdicion + 1}"></span> de <span th:text="${totalPagesEdicion}"></span>
+        </span>
+
+        <div class="pagination-controls">
+            <a th:if="${pageEdicion > 0}"
+               th:href="@{/admin(pageEdicion=${pageEdicion - 1}, pageEliminacion=${pageEliminacion}, estado=${estado})}"
+               class="btn-paginacion">
+                &laquo; Anterior
+            </a>
+
+            <a th:if="${pageEdicion < totalPagesEdicion - 1}"
+               th:href="@{/admin(pageEdicion=${pageEdicion + 1}, pageEliminacion=${pageEliminacion}, estado=${estado})}"
+               class="btn-paginacion">
+                Siguiente &raquo;
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${solicitudes.isEmpty()}" style="text-align: center; color: #666; margin-top: 40px;">
+        <h3>No hay solicitudes pendientes.</h3>
+    </div>
+
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

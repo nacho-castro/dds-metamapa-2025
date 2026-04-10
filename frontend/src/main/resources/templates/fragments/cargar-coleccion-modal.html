@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+    <title></title>
+</head>
+<body>
+<div id="coleccionModal" class="modal" th:fragment="cargar-coleccion-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h2>Cargar Colección</h2>
+        </div>
+        <form id="coleccionForm" th:action="@{/colecciones}" th:object="${coleccion}" method="post">
+            <label>Título</label>
+            <input type="text" th:field="*{titulo}" placeholder="Ingrese título" required>
+
+            <label>Descripción</label>
+            <textarea th:field="*{descripcion}" required></textarea>
+
+            <label for="algoritmoConsenso">Algoritmo</label>
+            <select th:field="*{algoritmoConsenso}" id="algoritmoConsenso" required>
+                <option value="ABSOLUTA">Absoluta</option>
+                <option value="MULTIPLESMENCIONES">Múltiples menciones</option>
+                <option value="MAYORIASIMPLE">Mayoría simple</option>
+                <option value="NOHAYALGORITMO">Sin algoritmo</option>
+            </select>
+
+            <label>Fuentes</label>
+            <div id="fuentesContainer">
+                <!-- agregar dinámicamente los campos de cada fuente -->
+            </div>
+            <button type="button" id="addFuenteBtn">➕ Agregar fuente</button>
+
+            <label>Criterios</label>
+            <div id="criteriosContainer">
+                <!-- agregar dinámicamente los campos de cada criterio -->
+            </div>
+            <button type="button" id="addCriterioBtn">➕ Agregar Criterio</button>
+
+            <button type="submit" class="next-btn">Enviar</button>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/colecciones.js}"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MetaMapa - Coleccion</title>
+  <link rel="icon" type="image/png" th:href="@{/images/metamapa-icon.png}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/hechos.css}">
+</head>
+
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<h2 class="coleccion-titulo" th:text="${coleccionNombre}">Nombre de la colección</h2>
+<p class="coleccion-descripcion" th:text="${coleccionDescripcion}">Descripción de la colección</p>
+
+<div class="grid">
+  <div th:each="hecho : ${hechos}" class="card">
+
+    <h3 th:text="${hecho.titulo}">Título del hecho</h3>
+    <p class="descripcion" th:text="${hecho.descripcion}"></p>
+    <p><strong>Categoría:</strong> <span th:text="${hecho.categoria}">Categoría</span></p>
+    <p><strong>Fecha del acontecimiento:</strong> <span th:text="${#temporals.format(hecho.fechaAcontecimiento, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
+    <p><strong>Fecha de carga:</strong> <span th:text="${#temporals.format(hecho.fechaCarga, 'dd/MM/yyyy')}">Fecha</span></p>
+
+    <div class="actions">
+
+      <div th:if="${esAdmin}" class="admin-actions-container">
+
+        <a th:href="@{/hechos/{id}/editar(id=${hecho.id}, idColeccion=${coleccionId})}"
+           class="btn-card-action btn-editar-action">
+          Editar
+        </a>
+
+        <form th:action="@{/hechos/{id}/eliminar(id=${hecho.id})}"
+              method="post"
+              onsubmit="return confirm('¿Seguro que desea eliminar este hecho permanentemente?');">
+
+          <input type="hidden" name="idColeccion" th:value="${coleccionId}"/>
+
+          <button type="submit" class="btn-card-action btn-borrar-action">
+            Borrar
+          </button>
+        </form>
+
+      </div>
+
+      <div th:if="${esContribuyente}" class="admin-actions-container" style="gap: 5px;">
+
+        <button type="button"
+                class="btn-card-action btn-solicitud-edicion"
+                th:attr="data-id=${hecho.id},
+                     data-titulo=${hecho.titulo},
+                     data-descripcion=${hecho.descripcion},
+                     data-categoria=${hecho.categoria}">
+          Sol. Edición
+        </button>
+
+        <button type="button"
+                th:attr="data-hecho-id=${hecho.id}"
+                class="btn-card-action btn-solicitud-eliminacion"
+                >
+          Sol. Eliminación
+        </button>
+      </div>
+
+    </div> </div> </div>
+
+<div class="pagination" th:if="${totalPages != null and totalPages > 0}"
+     th:with="radius=2,
+              startPage=${currentPage > radius ? currentPage - radius : 0},
+              endPage=${(currentPage + radius < totalPages) ? currentPage + radius : totalPages - 1}">
+
+  <button th:if="${currentPage > 0}"
+          th:onclick="|location.href='@{/colecciones/__${coleccionId}__(page=${currentPage - 1}, limit=${limit}, curada=${curada}, keyword=${keyword}, categoria=${categoriaSeleccionada}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}'|">
+    Anterior
+  </button>
+
+  <th:block th:if="${startPage > 0}">
+    <button th:onclick="|location.href='@{/colecciones/__${coleccionId}__(page=0, limit=${limit}, curada=${curada}, keyword=${keyword}, categoria=${categoriaSeleccionada}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}'|">1</button>
+    <span th:if="${startPage > 1}" style="padding: 0 5px;">...</span>
+  </th:block>
+
+  <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <button th:classappend="${i == currentPage} ? 'active' : ''"
+                th:onclick="|location.href='@{/colecciones/__${coleccionId}__(page=${i}, limit=${limit}, curada=${curada}, keyword=${keyword}, categoria=${categoriaSeleccionada}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}'|"
+                th:text="${i + 1}">
+        </button>
+    </span>
+
+  <th:block th:if="${endPage < totalPages - 1}">
+    <span th:if="${endPage < totalPages - 2}" style="padding: 0 5px;">...</span>
+    <button th:onclick="|location.href='@{/colecciones/__${coleccionId}__(page=${totalPages - 1}, limit=${limit}, curada=${curada}, keyword=${keyword}, categoria=${categoriaSeleccionada}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}'|"
+            th:text="${totalPages}">
+    </button>
+  </th:block>
+
+  <button th:if="${currentPage < totalPages - 1}"
+          th:onclick="|location.href='@{/colecciones/__${coleccionId}__(page=${currentPage + 1}, limit=${limit}, curada=${curada}, keyword=${keyword}, categoria=${categoriaSeleccionada}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}'|">
+    Siguiente
+  </button>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<div th:replace="fragments/login-modal :: login-modal"></div>
+<div th:replace="fragments/solicitud-eliminacion-modal :: solicitud-eliminacion-modal"></div>
+<div th:replace="fragments/solicitud-edicion-modal :: solicitud-edicion-modal"></div>
+<div th:replace="fragments/filtro-modal :: filtro-modal"></div>
+
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/hechos.js}"></script>
+</body>
+</html>

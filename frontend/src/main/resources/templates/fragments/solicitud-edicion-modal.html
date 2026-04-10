@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="solicitud-edicion-modal" id="solicitudEdicionModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header-custom" style="background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);">
+      <h3>✏️ Solicitar Edición</h3>
+      <span class="close-btn" id="closeEdicionModal">&times;</span>
+    </div>
+
+    <form th:action="@{/hechos/solicitudes/edicion}" method="post" class="modal-body-custom">
+      <input type="hidden" id="editHechoId" name="idHecho">
+      <input type="hidden" name="idColeccion" th:value="${coleccionId}">
+
+      <div class="input-group-custom">
+        <label for="editTitulo">Título propuesto</label>
+        <input type="text" id="editTitulo" name="nuevoTitulo" class="input-custom" required>
+      </div>
+
+      <div class="input-group-custom">
+        <label for="editDescripcion">Descripción propuesta</label>
+        <textarea id="editDescripcion" name="nuevaDescripcion" rows="4" class="input-custom" style="resize: vertical;" required></textarea>
+      </div>
+
+      <div class="input-group-custom">
+        <label for="editCategoria">Categoría propuesta</label>
+        <input type="text" id="editCategoria" name="nuevaCategoria" class="input-custom" required>
+      </div>
+
+      <div class="input-group-custom">
+        <label>Motivo del cambio (Opcional)</label>
+        <input type="text" name="motivo" placeholder="Ej: Error ortográfico, fecha incorrecta..." class="input-custom">
+      </div>
+
+      <div class="modal-footer-custom">
+        <button type="button" class="btn-secondary-custom" onclick="document.getElementById('solicitudEdicionModal').style.display='none'">Cancelar</button>
+        <button type="submit" class="btn-primary-custom" style="background: #8e44ad;">Enviar Solicitud</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

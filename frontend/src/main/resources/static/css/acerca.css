@@ -1,0 +1,45 @@
+/* =============================
+   ESTILO GENERAL
+============================= */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #0b1116;
+    background:
+        radial-gradient(1200px 700px at -10% 70%, rgba(233, 205, 196, .28), transparent 60%),
+        radial-gradient(900px 600px at 35% -10%, rgba(197, 226, 232, .30), transparent 55%),
+        radial-gradient(700px 500px at 60% 40%, rgba(220, 232, 238, .45), transparent 60%),
+        radial-gradient(1200px 900px at 90% 10%, rgba(255, 255, 255, .85), rgba(255, 255, 255, .95) 50%, rgba(255, 255, 255, 1) 60%);
+}
+
+/* =============================
+   CONTENIDO - ACERCA DE
+============================= */
+.content {
+    max-width: 900px;
+    margin: 6rem auto 2rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .08);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 1rem;
+}

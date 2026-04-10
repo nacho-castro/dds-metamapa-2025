@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaMapa - Acerca de</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" th:href="@{/images/metamapa-icon.png}">
+
+  <link rel="stylesheet" th:href="@{/css/styles.css}">    <!-- CSS PRINCIPAL (navbar, footer) -->
+  <link rel="stylesheet" th:href="@{/css/acerca.css}">   <!-- CSS ESPECÍFICO DE ACERCA DE -->
+</head>
+
+<!-- COMIENZA ACERCA DE (LEGAL) -->
+<body>
+  <!-- BARRA DE NAVEGACION -->
+  <div th:replace="fragments/navbar :: navbar"></div>
+
+  <div class="content">
+    <h1>Acerca de MetaMapa</h1>
+
+    <h2>Propósito</h2>
+    <p>MetaMapa es una plataforma para gestionar y visualizar hechos georreferenciados, diseñada para contribuir a la
+      recopilación, análisis y divulgación de información relevante de forma segura y accesible.</p>
+
+    <h2>Información Legal</h2>
+    <p>MetaMapa cumple con las leyes aplicables en materia de protección de datos y propiedad intelectual. Todos los
+      contenidos subidos por los usuarios son de su exclusiva responsabilidad. La plataforma se reserva el derecho de
+      moderar, editar o eliminar cualquier contenido que infrinja las leyes vigentes o nuestras políticas internas.</p>
+
+    <h2>Política de Privacidad</h2>
+    <p>La información personal recolectada se utiliza únicamente para la prestación de servicios y mejora de la
+      experiencia del usuario. No compartimos datos con terceros sin consentimiento previo, salvo obligación legal.</p>
+
+    <h2>Limitación de Responsabilidad</h2>
+    <p>MetaMapa no se hace responsable por el uso indebido de la información publicada ni por daños derivados del
+      acceso, uso o imposibilidad de uso de la plataforma.</p>
+
+    <h2>Contacto</h2>
+    <p>Para consultas legales o solicitudes relacionadas con la privacidad, comunicarse a:
+      <strong>legal@metamapa.com</strong>.
+    </p>
+  </div>
+
+  <!-- FOOTER -->
+  <div th:replace="fragments/footer :: footer"></div>
+
+  <!-- Modal de Login -->
+  <div th:replace="fragments/login-modal :: login-modal"></div>
+
+  <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

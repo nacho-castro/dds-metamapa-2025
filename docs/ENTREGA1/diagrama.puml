@@ -1,0 +1,175 @@
+@startuml
+
+'--------------------------------------------------------------
+'Criterios
+abstract class Criterio{
+ #criterio: Predicate<Hecho>
+ +cumpleCriterio(Hecho hecho): boolean
+}
+
+class CriterioCategoria{
+ -categoria: String
+}
+
+class CriterioFecha{
+ -minFecha: LocalDate
+ -maxFecha: LocalDate
+}
+
+class CriterioTitulo{
+ -titulo: String
+}
+
+'-------------------------------------------------------------
+'Dataset
+interface Dataset{
+ +obtenerInformacion(): List<Hecho>
+}
+
+class DatasetCSV{
+ -listaHechos: List<Hecho>
+ -filename: String
+ +obtenerInformacion(): List<Hecho>
+}
+
+class ImportadorCSV{
+ -static formatter: DateTimeFormatter
+ + static parsearLinea(String linea): Hecho
+}
+
+'--------------------------------------------------------------
+'FUENTES
+abstract class Fuente{
+ -id: Long;
+ -hechos: List<Hecho>;
+ +obtenerHechos(): List<Hecho>
+}
+
+class FuenteEstatica{
+ -dataset: Dataset
+}
+
+class FuenteDinamica{
+}
+
+class FuenteProxy{
+}
+'--------------------------------------------------------------
+'HECHOS
+class Hecho{
+    - titulo: String
+    - descripcion: String
+    - categoria: String
+    - activo: Boolean
+    - fechaAcontecimiento: LocalDate
+    - fechaCarga: LocalDate
+    - lugarAcontecimiento: Lugar
+    - contenido: Contenido
+    - etiquetas: List<Etiqueta>
+    + desactivarHecho(): void
+}
+class Etiqueta{
+ -nombre: String
+}
+
+abstract class Contenido{
+}
+
+class ContenidoMultimedia{
+    -multimedia: List<Multimedia>
+}
+
+class ContenidoTexto{
+    -texto: String
+}
+
+abstract class Multimedia {
+}
+
+class Lugar{
+    - latitud: Double
+    - longitud: Double
+    - municipio: String
+    - provincia: String
+    + obtenerDireccion(): String
+}
+
+'--------------------------------------------------------------
+'COLECCION
+class Coleccion{
+    - titulo: String
+    - descripcion: String
+    - criterios: List<Criterio>
+    - fuente: Fuente
+    # hechos: List<Hecho>
+}
+'--------------------------------------------------------------
+'USUARIO
+class Usuario{
+  -id: Integer
+  -nombre: String
+  -password: String
+  -rol: Rol
+}
+
+class Rol{
+  -nombreRol: TipoRoles
+  -permisos: List<Permisos>
+  +tienePermiso(Permiso permiso): Boolean
+}
+
+class Solicitud{
+    - coleccion: Coleccion
+    - hecho: Hecho
+    - motivoBorrado: String
+    - historialEstados: List<EstadoBis>
+    - static int minCaracter: Integer
+    + agregarNuevoEstado(Estado nuevoEstado, Rol publicador, Rol editor)
+}
+
+class EstadoBis{
+     - estadoActual: Estado
+     - fechaCambio: LocalDateTime
+     - publicador: Rol
+     - editor: Rol
+     - cambiarEstado(Estado estado): void
+}
+
+enum Estado{
+     PENDIENTE,
+     ACEPTADA,
+     RECHAZADA
+}
+'--------------------------------------------------------------
+Coleccion --> Fuente : usa
+Coleccion --> "*" Hecho : contiene
+Coleccion --> "*" Criterio : tiene
+
+Fuente <|-- FuenteProxy
+Fuente <|-- FuenteEstatica
+Fuente <|-- FuenteDinamica
+
+Criterio <|-- CriterioCategoria
+Criterio <|-- CriterioFecha
+Criterio <|-- CriterioTitulo
+
+Contenido <|-- ContenidoTexto
+Contenido <|-- ContenidoMultimedia
+ContenidoMultimedia --> "*" Multimedia
+Hecho --> Contenido
+Hecho -> "*" Etiqueta
+Hecho --> Lugar
+
+Dataset <|.. DatasetCSV
+Dataset <-- FuenteEstatica
+DatasetCSV --> ImportadorCSV
+
+Solicitud -> Coleccion
+Solicitud -> Hecho
+Solicitud -->"*" EstadoBis
+EstadoBis --> Estado
+
+Rol <-- EstadoBis
+Usuario --> Rol
+
+@enduml

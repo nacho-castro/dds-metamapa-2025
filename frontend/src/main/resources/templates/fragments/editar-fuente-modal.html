@@ -1,0 +1,42 @@
+<div id="editarFuenteModal" class="modal" th:fragment="editar-fuente-modal">
+  <div class="modal-content">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+      <h2>Editar Fuente</h2>
+      <span class="close" onclick="cerrarModal('editarFuenteModal')">&times;</span>
+    </div>
+
+    <!-- FORM -->
+    <form id="editarFuenteForm" method="post">
+
+      <label>Nombre</label>
+      <input type="text" id="editarNombre" name="nombre" required>
+
+      <label>Tipo Fuente</label>
+      <select id="editarTipoFuente" name="tipoFuente" required>
+        <option value="DINAMICA">Dinámica</option>
+        <option value="ESTATICA">Estática</option>
+        <option value="PROXY">Proxy</option>
+      </select>
+
+      <label>Path</label>
+      <textarea id="editarPath" name="path" required></textarea>
+
+      <label>Path Info</label>
+      <input type="text" id="editarPathInfo" name="pathInfo">
+
+      <div class="modal-actions">
+        <button type="button"
+                class="btn-cancelar"
+                onclick="cerrarModal('editarFuenteModal')">
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn-guardar">
+          Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MetaMapa - Panel de Métricas</title>
+    <link rel="icon" type="image/png" href="images/metamapa-icon.png">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">    <!-- CSS PRINCIPAL (navbar, footer) -->
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<section id="estadisticas">
+
+    <h2>Métricas Generales</h2>
+
+    <!-- Descripción / preguntas del análisis -->
+    <div class="estadisticas-descripcion">
+        <p>Este panel presenta datos agregados que permiten responder las siguientes preguntas clave:</p>
+        <ul>
+            <li>📍 ¿De una colección, en qué provincia se agrupan la mayor cantidad de hechos reportados?</li>
+            <li>🏷️ ¿Cuál es la categoría con mayor cantidad de hechos reportados?</li>
+            <li>🌎 ¿En qué provincia se presenta la mayor cantidad de hechos de una cierta categoría?</li>
+            <li>⏰ ¿A qué hora del día ocurren la mayor cantidad de hechos de una cierta categoría?</li>
+            <li>🗑️ ¿Cuántas solicitudes de eliminación son consideradas spam?</li>
+        </ul>
+    </div>
+
+    <!-- Provincias más frecuentes -->
+    <h3>Provincias más frecuentes</h3>
+    <div class="estadisticas-grid">
+        <div class="estadisticas-header">
+            <span>Provincia</span>
+            <span>Casos</span>
+            <span>Fecha cálculo</span>
+        </div>
+
+        <div th:each="e : ${estadisticasProvincias}" class="estadisticas-row">
+            <span th:text="${e.clave}">Provincia</span>
+            <span th:text="${e.valor}">Cantidad</span>
+            <span th:text="${#temporals.format(e.fechaCalculo, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+        </div>
+    </div>
+
+    <!-- Categorías más frecuentes -->
+    <h3>Categorías más frecuentes</h3>
+    <div class="estadisticas-grid">
+        <div class="estadisticas-header">
+            <span>Categoría</span>
+            <span>Casos</span>
+            <span>Fecha cálculo</span>
+        </div>
+
+        <div th:each="e : ${estadisticasCategorias}" class="estadisticas-row">
+            <span th:text="${e.clave}">Categoría</span>
+            <span th:text="${e.valor}">Cantidad</span>
+            <span th:text="${#temporals.format(e.fechaCalculo, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+        </div>
+    </div>
+
+    <!-- Provincias con más hechos por categoría -->
+    <h3>Provincias con más hechos por categoría</h3>
+    <div class="estadisticas-grid">
+        <div class="estadisticas-header">
+            <span>Categoría</span>
+            <span>Provincia</span>
+            <span>Casos</span>
+            <span>Fecha cálculo</span>
+        </div>
+
+        <div th:each="e : ${estadisticasProvinciasPorCategoria}" class="estadisticas-row">
+            <span th:text="${e.categoria}">Categoría</span>
+            <span th:text="${e.provincia}">Provincia</span>
+            <span th:text="${e.valor}">Cantidad</span>
+            <span th:text="${#temporals.format(e.fechaCalculo, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+        </div>
+    </div>
+
+    <!-- Horarios con más hechos por categoría -->
+    <h3>Horarios con más hechos por categoría</h3>
+    <div class="estadisticas-grid">
+        <div class="estadisticas-header">
+            <span>Categoría</span>
+            <span>Hora del día</span>
+            <span>Casos</span>
+            <span>Fecha cálculo</span>
+        </div>
+
+        <div th:each="e : ${estadisticasHorariosPorCategoria}" class="estadisticas-row">
+            <span th:text="${e.categoria}">Categoría</span>
+            <span th:text="${e.hora}">Hora</span>
+            <span th:text="${e.valor}">Cantidad</span>
+            <span th:text="${#temporals.format(e.fechaCalculo, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+        </div>
+    </div>
+
+    <!-- Solicitudes de eliminación spam -->
+    <h3>Solicitudes de eliminación consideradas spam</h3>
+    <div class="estadisticas-grid">
+        <div class="estadisticas-header">
+            <span>Cantidad</span>
+            <span>Fecha cálculo</span>
+        </div>
+
+        <div th:each="e : ${estadisticasSpam}" class="estadisticas-row">
+            <span th:text="${e.valor}">Cantidad</span>
+            <span th:text="${#temporals.format(e.fechaCalculo, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+        </div>
+    </div>
+
+</section>
+
+    <!-- FOOTER -->
+    <div th:replace="fragments/footer :: footer"></div>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/estadisticas.js}"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaMapa - Mapa</title>
+  <link rel="icon" type="image/png" href="images/metamapa-icon.png">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+</head>
+
+<body>
+<!-- BARRA DE NAVEGACION -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  window.fuentesDisponibles = /*[[${fuentesDisponibles}]]*/ [];
+  window.fuentes = /*[[${fuentesDisponibles}]]*/ [];
+  window.hechosData = /*[[${hechos}]]*/ [];
+  window.criteriosDisponibles = /*[[${criteriosDisponibles}]]*/ [];
+  window.criterios = /*[[${criteriosDisponibles}]]*/ [];
+
+  console.log('=== DATOS CARGADOS ===');
+  console.log('fuentesDisponibles:', window.fuentesDisponibles);
+  console.log('Es array:', Array.isArray(window.fuentesDisponibles));
+  console.log('Longitud:', window.fuentesDisponibles ? window.fuentesDisponibles.length : 'null');
+  if (window.fuentesDisponibles && window.fuentesDisponibles.length > 0) {
+    console.log('Primera fuente:', window.fuentesDisponibles[0]);
+  }
+  /*]]>*/
+</script>
+
+<!-- MAPA INTERACTIVO CON HECHOS CARGADOS -->
+<div class="map-container">
+
+  <div id="map" style="width: 100%; height: 500px;"></div>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <small>
+    <a href="https://www.openstreetmap.org/#map=16/-34.5994/-58.3758" target="_blank">Ver mapa más grande</a>
+  </small>
+</div>
+
+<!-- MENSAJES DE ERROR/ÉXITO -->
+<div th:if="${error}" class="alert alert-error" style="margin: 20px; padding: 15px; background-color: #f8d7da; color: #721c24; border-radius: 4px;">
+  <span th:text="${error}"></span>
+</div>
+
+<div th:if="${mensaje}" class="alert alert-success" style="margin: 20px; padding: 15px; background-color: #d4edda; color: #155724; border-radius: 4px;">
+  <span th:text="${mensaje}"></span>
+</div>
+
+<!-- COLECCIONES -->
+<div class="grid" th:if="${colecciones != null and !colecciones.isEmpty()}">
+  <div th:each="c : ${colecciones}" class="card">
+    <h3 th:text="${c.titulo}">Título</h3>
+    <p th:text="${c.descripcion}">Descripción</p>
+    <div class="meta">
+      Algoritmo: <span th:text="${c.algoritmoConsenso}">Algoritmo</span>
+    </div>
+
+    <div class="actions">
+      <!-- Botón siempre visible -->
+      <button th:onclick="'location.href=\'/colecciones/' + ${c.id} + '\';'">
+        Ver colección
+      </button>
+
+      <!-- Botones solo para ADMINISTRADOR -->
+      <div class="admin-icons" th:if="${rol == 'ADMINISTRADOR'}">
+        <button type="button"
+                class="edit-btn"
+                th:attr="data-id=${c.id}, data-titulo=${c.titulo}, data-descripcion=${c.descripcion}, data-algoritmo=${c.algoritmoConsenso}"
+                onclick="abrirModalEditar(this)"
+                title="Editar">✏️</button>
+
+        <form th:action="@{/colecciones/{id}/eliminar(id=${c.id})}" method="post"
+              onsubmit="return confirm('¿Estás seguro de eliminar esta colección?');"
+              style="display: inline;">
+          <button type="submit" title="Eliminar">🗑️</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:if="${colecciones == null or colecciones.isEmpty()}" class="empty-state" style="text-align: center; padding: 40px;">
+  <p>No hay colecciones disponibles en este momento.</p>
+</div>
+
+<!-- PAGINACIÓN - Solo mostrar si hay datos válidos -->
+<div class="pagination" th:if="${totalPages != null and totalPages > 0}">
+  <button
+          th:if="${currentPage != null and currentPage > 0}"
+          th:onclick="'location.href=\'/colecciones?page=' + (${currentPage} - 1) + '&limit=6\''">
+    Anterior
+  </button>
+
+  <span th:if="${totalPages != null}" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+    <button
+            th:classappend="${currentPage != null and i == currentPage} ? 'active' : ''"
+            th:onclick="'location.href=\'/colecciones?page=' + ${i} + '&limit=6\''"
+            th:text="${i + 1}">
+    </button>
+  </span>
+
+  <button
+          th:if="${currentPage != null and totalPages != null and currentPage < totalPages - 1}"
+          th:onclick="'location.href=\'/colecciones?page=' + (${currentPage} + 1) + '&limit=6\''">
+    Siguiente
+  </button>
+</div>
+
+<!-- FOOTER -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Modal de Login -->
+<div th:replace="~{fragments/login-modal :: login-modal}"></div>
+
+<!-- Modal de Colecciones -->
+<div th:replace="~{fragments/cargar-coleccion-modal :: cargar-coleccion-modal}"></div>
+
+<!-- Modal de Hechos -->
+<div th:replace="~{fragments/cargar-hecho-modal :: cargar-hecho-modal}"></div>
+
+<!-- Modal de Criterios -->
+<div th:replace="~{fragments/cargar-criterio-modal :: cargar-criterio-modal}"></div>
+
+<!-- Modal de Editar Coleccion -->
+<div th:replace="~{fragments/editar-coleccion-modal :: editar-coleccion-modal}"></div>
+
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/colecciones.js}"></script>
+<script th:src="@{/js/mapa.js}"></script>
+
+<script>
+  // Función para abrir el modal de edición con los datos de la colección
+  function abrirModalEditar(button) {
+      const id = button.getAttribute('data-id');
+      const titulo = button.getAttribute('data-titulo');
+      const descripcion = button.getAttribute('data-descripcion');
+      const algoritmo = button.getAttribute('data-algoritmo');
+
+      // Rellenar el formulario con los datos actuales
+      document.getElementById('titulo').value = titulo;
+      document.getElementById('descripcion').value = descripcion;
+
+      // Actualizar la acción del formulario con el ID correcto
+      const form = document.getElementById('editarColeccionForm');
+      form.action = '/colecciones/' + id + '/editar';
+
+      // Mostrar el modal
+      const modal = document.getElementById('editarColeccionModal');
+      if (modal) {
+          modal.style.display = 'block';
+      }
+  }
+
+  // Función para cerrar el modal (si no está en colecciones.js)
+  function cerrarModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+          modal.style.display = 'none';
+      }
+  }
+
+  // Cerrar modal al hacer clic fuera de él
+  window.onclick = function(event) {
+      const modal = document.getElementById('editarColeccionModal');
+      if (event.target === modal) {
+          modal.style.display = 'none';
+      }
+  }
+</script>
+
+</body>
+</html>

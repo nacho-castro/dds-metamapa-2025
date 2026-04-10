@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitud de Eliminación</title>
+    <link rel="stylesheet" th:href="@{/css/hechos.css}">
+</head>
+<body>
+<div id="solicitudEliminacionModal" class="modal" th:fragment="solicitud-eliminacion-modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarSolicitudEliminacion()">&times;</span>
+
+        <div class="modal-header">
+            <h2>Solicitud de eliminación de hecho</h2>
+        </div>
+
+        <form id="solicitudEliminacionForm" th:action="@{/hechos/solicitud-eliminacion}" method="post">
+            <input type="hidden" name="idHecho" id="hechoIdInput" />
+
+            <label for="justificacion">Justificación</label>
+            <textarea id="justificacion" name="motivoBorrado" maxlength="500"
+                      placeholder="Ingrese una justificación (máx. 500 caracteres)" required></textarea>
+            <small style="color:gray;">Máximo 500 caracteres</small>
+
+            <div class="modal-footer">
+                <button type="button" class="cancel-btn" onclick="cerrarSolicitudEliminacion()">Cancelar</button>
+                <button type="submit" class="next-btn">Enviar Solicitud</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script th:src="@{/js/hechos.js}"></script>
+</body>
+</html>

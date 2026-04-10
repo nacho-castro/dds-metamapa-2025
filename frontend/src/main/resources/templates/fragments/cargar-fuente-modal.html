@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/colecciones.css}">
+</head>
+<body>
+<div id="fuenteModal" class="modal" th:fragment="cargar-fuente-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h2>Cargar Fuente</h2>
+        </div>
+        <form id="fuenteForm" th:action="@{/fuentes}" th:object="${fuente}" method="post">
+            <!-- Tipo Fuente -->
+            <div class="field-group">
+                <label>Nombre</label>
+                <input type="text"
+                       th:field="*{nombre}"
+                       placeholder="Nombre de la fuente"
+                       required />
+                <label>Tipo Fuente</label>
+                <select id="tipoFuente" th:field="*{tipoFuente}" required>
+                    <option value="">-- Seleccionar tipo de fuente --</option>
+                    <option value="DINAMICA">Dinámica</option>
+                    <option value="ESTATICA">Estática</option>
+                    <option value="PROXY">Proxy</option>
+                </select>
+            </div>
+
+            <!-- Path -->
+            <div class="field-group">
+                <label>Path</label>
+                <textarea name="path" th:field="*{path}" placeholder="Ingrese el path" required></textarea>
+            </div>
+
+            <!-- PathInfo -->
+            <div class="field-group">
+                <label>PathInfo</label>
+                <input type="text" name="pathInfo" th:field="*{pathInfo}" placeholder="Ingrese la información del path" required>
+            </div>
+
+            <!-- BOTÓN GUARDAR -->
+            <div class="field-group">
+                <button type="submit" class="next-btn">Guardar Fuente</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/js/colecciones.js}"></script>
+</body>
+</html>

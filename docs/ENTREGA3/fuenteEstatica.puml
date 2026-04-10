@@ -1,0 +1,128 @@
+@startuml
+
+' Controller
+
+class FuenteEstaticaController {
+  - hechoService: IHechoService
+  + obtenerHechos(DatasetType tipo, String path): List<HechoDTOOutput>
+  + obtenerHechoPorTitulo(DatasetType tipo,String path, String titulo): HechoDTOOutput
+}
+
+
+' Entities
+
+' dtos.output
+
+class EtiquetaDTOOutput {
+  - nombre: String
+}
+
+class HechoDTOOutput {
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - fechaAcontecimiento: LocalDate
+  - lugarAcontecimiento: LugarDTOOutput
+  - etiquetas: List<EtiquetaDTOOutput>
+}
+
+class LugarDTOOutput {
+  - latitud: Double
+  - longitud: Double
+}
+
+
+' Datasets
+
+interface Dataset{
+    + obtenerInformacion(): List<Hecho>
+}
+
+class DatasetCSV{
+    - filename: String
+    + obtenerInformacion(): List<Hecho>
+}
+
+enum DataSetType {
+    + CSV
+    + DB
+}
+
+class ImportadorCSV{
+    + parsearLinea(String linea): Hecho
+}
+
+
+
+' HECHOS
+
+class Lugar{
+    - latitud: Double
+    - longitud: Double
+    - municipio: String
+    - provincia: String
+    + toString(): String
+    + obtenerDireccion(): String
+}
+
+class Etiqueta{
+    - nombre: String
+}
+
+class Hecho{
+        - id: Long
+        - titulo: String
+        - descripcion: String
+        - categoria: String
+        - activo: Boolean
+        - fechaAcontecimiento: LocalDate
+        - fechaCarga: LocalDate
+        - lugarAcontecimiento: Lugar
+        - etiquetas: List<Etiqueta>
+        + desactivarHecho(): void
+}
+
+class HechoMapper {
+  + hechoToDTO(Hecho hecho): HechoDTOOutput
+  + lugarToDTO(Lugar lugar): LugarDTOOutput
+  + etiquetasToDTOs(List<Etiqueta> etiquetas): List<EtiquetaDTOOutput>
+}
+
+class Contenido{
+}
+
+class ContenidoMultimedia{
+    - multimedia: List<Multimedia>
+}
+
+class ContenidoTexto{
+    - texto: String
+}
+
+class Multimedia{
+
+}
+
+
+interface IHechoService {
+  + getHechoByTitulo(String titulo, DatasetType tipo, String path): HechoDTOOutput
+  + obtenerHechosDesde(DatasetType tipo, String path): List<HechoDTOOutput>
+}
+
+interface IDatasetService {
+  + obtenerInformacion(Dataset dataset): List<Hecho>
+  + construirDataset(DatasetType tipo, String path): Dataset
+}
+
+class HechoService {
+  + getHechoByTitulo(String titulo, DatasetType tipo, String path): HechoDTOOutput
+  + obtenerHechosDesde(DatasetType tipo, String path): List<HechoDTOOutput>
+}
+
+class DatasetService {
+  + obtenerInformacion(Dataset dataset): List<Hecho>
+  + construirDataset(DatasetType tipo, String path): Dataset
+}
+
+
+@enduml
